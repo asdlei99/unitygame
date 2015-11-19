@@ -3,14 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 class HeroBaseModel: BaseModel
 {
-    protected GameObject mGameObject;
-    protected string mType;//类型
-    protected int mLevel;//英雄等级
-    protected int mCurrExp;//英雄当前经验
+    protected int mAttackDistance = 4;
+    protected int mAlertDistance = 10;
+    protected string mCamp = "";
+    protected GameObject mGameObject = null;
+    protected string mType = "";//类型
+    protected int mLevel = 1;//英雄等级
+    protected int mCurrExp = 0;//英雄当前经验
     //技能
     //装备
-    protected HeroAttrConfig mConfig;//配置文件
-    protected Dictionary<string, float> mChangedDatas;//
+    protected HeroAttrConfig mConfig = null;//配置文件
+    protected Dictionary<string, float> mChangedDatas = null;//
+
+    protected HeroBaseModel()
+    {
+        initConfig();
+        mChangedDatas = new Dictionary<string, float>();
+    }
+
+    public int AttackDistance
+    {
+        get { return mAttackDistance; }
+        set { mAttackDistance = value; }
+    }
+
+    public int AlertDistance
+    {
+        get { return mAlertDistance; }
+        set { mAlertDistance = value; }
+    }
+
     public GameObject GameObject
     {
         get
@@ -70,6 +92,12 @@ class HeroBaseModel: BaseModel
         }
     }
 
+    public String Camp
+    {
+        get { return mCamp; }
+        set { mCamp = value; }
+    }
+
     public void growExp(int exp)
     {
         this.mCurrExp += exp;
@@ -83,9 +111,19 @@ class HeroBaseModel: BaseModel
         }
     }
 
+    public bool isInSameCamp(HeroBaseModel model)
+    {
+        return Camp.Equals(model.Camp);
+    }
+
     public float get(string type)
     {
-        return this.mConfig.get(mLevel, type) + mChangedDatas[type];
+        float changedValue = 0;
+        if (mChangedDatas.ContainsKey(type))
+        {
+            changedValue = mChangedDatas[type];
+        }
+        return this.mConfig.get(mLevel, type) + changedValue;
     }
 
     //增加/减少数值
@@ -101,12 +139,6 @@ class HeroBaseModel: BaseModel
 
     protected virtual void initConfig()
     {
-    }
-
-    protected HeroBaseModel()
-    {
-        initConfig();
-        mChangedDatas = new Dictionary<string, float>();
     }
 
     protected virtual HeroBaseModel newInstance()

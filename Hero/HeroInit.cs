@@ -8,15 +8,18 @@ class HeroInit: BaseObject
     protected override void Start()
     {
         mAnimCtl = this.gameObject.AddComponent<HeroAnimController>();
-        mCamera = this.gameObject.AddComponent<HeroCamera>();
-        mapEvents();
         bindModel();
+        mapEvents();
 
-        //默认选人
-        delayCall(1, delegate (object d)
+        //TODO: 测试代码，选人的时候直接调用下面的dispatch即可
+        if (this.getUtil().SelectedHeroName == null)
         {
-            dispatch(Events.EVENT_SELECT_HERO, Constants.HERO_NAME_JINGCHA);
-        }, null);
+            //默认选人
+            delayCall(1, delegate (object d)
+            {
+                dispatch(Events.EVENT_SELECT_HERO, Constants.HERO_NAME_JINGCHA);
+            }, null);
+        }
     }
 
     //事件监听
@@ -43,6 +46,9 @@ class HeroInit: BaseObject
                 {
                     mapEvent(Events.EVENT_INPUT_JUMP, onEvent);
                     mapEvent(Events.EVENT_INPUT_SCREEN_CLICK, onEvent);
+
+                    mCamera = this.gameObject.AddComponent<HeroCamera>();
+
                     //让gameObject检查同步
                     HeroSync.init();
                     GlobalObject.getComponent<HeroSync>().registerSync(gameObject.name, gameObject);

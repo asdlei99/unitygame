@@ -41,4 +41,8 @@ public class Constants
     public const string HERO_ATTR_RALLY = "rally";//反弹：没有相对变量
     public const string HERO_ATTR_BEATTACK_ATTR_ADD = "beattackheroattradd";//被攻击属性增加
     public const string HERO_ATTR_BEATTACK_ENEMY_ATTR_ADD = "beattackenemyattradd";//被攻击敌人属性增加
+
+
+    //人物移动正常速度
+    public const float HERO_RUN_NORMAL_SPEED = 5;
 }
