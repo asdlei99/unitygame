@@ -16,10 +16,13 @@ class HeroRunState : HeroState
 
     void resetTarget()
     {
-        if (!AnimCtl.RunToTarget.Equals(mTarget))
+        if (hasExtraData("runtotarget"))
         {
-            mTarget = AnimCtl.RunToTarget;
-            AnimCtl.setNewDestination(mTarget);
+            Vector3 runToTarget = (Vector3)getExtraData("runtotarget");
+            if (!runToTarget.Equals(mTarget)) {
+                mTarget = runToTarget;
+                AnimCtl.setNewDestination(mTarget);
+            }
         }
     }
 

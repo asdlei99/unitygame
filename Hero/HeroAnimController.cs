@@ -8,7 +8,6 @@ public class HeroAnimController : BaseObject {
     private NavMeshAgent mNavAgent;
     private Rigidbody mRigidBody;
     private bool isRunning;
-    private Vector3 mRunToTarget = Vector3.zero;
     private bool isJumping;
     private bool isChasing;
     private GameObject mChaseObj;
@@ -44,11 +43,6 @@ public class HeroAnimController : BaseObject {
     public GameObject ChaseObject
     {
         get { return mChaseObj; }
-    }
-
-    public Vector3 RunToTarget
-    {
-        get { return mRunToTarget; }
     }
 
     public NavMeshAgent NavAgent
@@ -128,7 +122,7 @@ public class HeroAnimController : BaseObject {
         isRunning = true;
         mAnim.speed = mAnimInitSpeed * mNavAgent.speed / Constants.HERO_RUN_NORMAL_SPEED;
         setAnimValue("speed", 1);
-        mRunToTarget = target;
+        mStateManager.setExtraData("runtotarget", target);
     }
 
     public void stopRun()
