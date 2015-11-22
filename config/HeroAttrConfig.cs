@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //英雄属性配置
-class HeroAttrConfig
+public class HeroAttrConfig
 {
     protected float attackStart = 20;
     protected float defenseStart = 10;

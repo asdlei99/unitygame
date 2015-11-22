@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-class BaseModel
+public class BaseModel
 {
 }

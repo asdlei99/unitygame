@@ -33,10 +33,10 @@ class HeroInit: BaseObject
         switch (evt)
         {
             case Events.EVENT_INPUT_JUMP:
-                mAnimCtl.doJump();
+                mAnimCtl.startJump();
                 break;
             case Events.EVENT_INPUT_SCREEN_CLICK:
-                mAnimCtl.doRun((Vector3)data);
+                mAnimCtl.startRun((Vector3)data);
                 break;
             case Events.EVENT_SELECT_HERO:
                 string selectName = (string)data;

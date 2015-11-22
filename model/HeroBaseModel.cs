@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-class HeroBaseModel: BaseModel
+public class HeroBaseModel: BaseModel
 {
-    protected int mAttackDistance = 4;
-    protected int mAlertDistance = 10;
-    protected string mCamp = "";
+    protected int mAttackDistance = 2;//攻击距离
+    protected int mAlertDistance = 10;//可发现敌人距离
+    protected string mCamp = "";//阵营，属于魏蜀吴哪一国家
     protected GameObject mGameObject = null;
     protected string mType = "";//类型
     protected int mLevel = 1;//英雄等级
