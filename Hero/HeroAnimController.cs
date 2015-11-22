@@ -61,7 +61,7 @@ public class HeroAnimController : BaseObject {
         mNavAgent = GetComponent<NavMeshAgent>();
         mRigidBody = GetComponent<Rigidbody>();
 
-        mRigidBody.useGravity = true;
+        mRigidBody.useGravity = false;
         
         //配置文件
         mModel = HeroModelFactory.getHeroModel(gameObject.name);
@@ -152,13 +152,11 @@ public class HeroAnimController : BaseObject {
         mAnim.speed = mAnimInitSpeed;
 
         mNavAgent.enabled = false;//跳跃时取消navAgent，否则根本跳不起来
-        mRigidBody.useGravity = false;//跳跃时取消重力，否则重力会影响跳跃高度的计算
     }
 
     public void stopJump()
     {
         mNavAgent.enabled = true;
-        mRigidBody.useGravity = true;
 
         setAnimValue("newJump", 0);
         setAnimValue("speed", 0);
