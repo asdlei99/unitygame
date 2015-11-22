@@ -15,6 +15,7 @@ public class HeroAnimController : BaseObject {
     private string mCurrRunningAnim;
     private HeroBaseModel mModel;
     private StateManager mStateManager;
+    private HeroBloodAndMagic mBloodBar;
 
     private bool isAttacking;
 
@@ -50,10 +51,17 @@ public class HeroAnimController : BaseObject {
         get { return mRunToTarget; }
     }
 
+    public NavMeshAgent NavAgent
+    {
+        get { return mNavAgent; }
+    }
+
     protected override void Start() {
         mAnim = GetComponent<Animator>();
         mNavAgent = GetComponent<NavMeshAgent>();
         mRigidBody = GetComponent<Rigidbody>();
+
+        mRigidBody.useGravity = true;
         
         //配置文件
         mModel = HeroModelFactory.getHeroModel(gameObject.name);
@@ -74,6 +82,8 @@ public class HeroAnimController : BaseObject {
         mStateManager.addState(new HeroIdleState());
         mStateManager.addState(new HeroJumpState());
         mStateManager.setDefaultState("HeroIdleState");
+
+        mBloodBar = gameObject.AddComponent<HeroBloodAndMagic>();
     }
 
     public void startChase(GameObject chaseObj)
@@ -143,17 +153,16 @@ public class HeroAnimController : BaseObject {
 
         mNavAgent.enabled = false;//跳跃时取消navAgent，否则根本跳不起来
         mRigidBody.useGravity = false;//跳跃时取消重力，否则重力会影响跳跃高度的计算
-
-        StartCoroutine(updateJumpAnim());
     }
 
     public void stopJump()
     {
         mNavAgent.enabled = true;
-        mRigidBody.useGravity = false;
+        mRigidBody.useGravity = true;
 
         setAnimValue("newJump", 0);
         setAnimValue("speed", 0);
+        isJumping = false;
     }
 
     public void setNewDestination(Vector3 target)
@@ -226,41 +235,6 @@ public class HeroAnimController : BaseObject {
                 }
             }
         }
-    }
-
-    IEnumerator updateJumpAnim()
-    {
-        float currJumpValue = 0.11f;//跳跃起始时间
-        float jumpValueTotal = 1.79f;//跳跃时间
-        float jumpHeight = 2;//跳跃高度
-        float startUpSpeed = 2 * jumpHeight / (jumpValueTotal / 2);// v = at/2 up方向起始速度
-        float upA = -startUpSpeed / (jumpValueTotal / 2);//跳跃up方向加速度
-        float currUpSpeed = startUpSpeed;//当前跳跃up方向速度
-        float costTime = 1.0f;//整个跳跃动画花费时间
-        float jumpValueGrowSpeed = jumpValueTotal / costTime; //每次 jumpValue 增长多少
-
-        double currTime = Time.time;
-        int times = 0;
-        do
-        {
-            times++;
-            currTime += Time.deltaTime;
-            float offJumpValue = jumpValueGrowSpeed * Time.deltaTime;
-            currJumpValue = currJumpValue + offJumpValue;
-            setAnimValue("newJump", currJumpValue);
-            //跳跃时前进
-            float forwardDis = offJumpValue * mNavAgent.speed;
-
-            //跳跃时上升
-            float startUpSpeedInner = currUpSpeed;
-            currUpSpeed = startUpSpeedInner + upA * offJumpValue; // vt = v0 + at
-            float upDis = (Mathf.Pow(currUpSpeed, 2) - Mathf.Pow(startUpSpeedInner, 2)) / (2 * upA);
-
-            transform.position += transform.forward * forwardDis + transform.up * upDis;
-            yield return 0;
-        } while (currJumpValue <= 1.9f);
-
-        isJumping = false;
     }
 
     //下面3个函数，防止人物相撞后滑动。

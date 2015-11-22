@@ -6,6 +6,7 @@ class StateManager: BaseObject
     Dictionary<string, BaseState> mStatesDict = new Dictionary<string, BaseState>();
     Dictionary<string, object> mExtraData = new Dictionary<string, object>();//用于不同状态之间传递数据
     BaseState mCurrState;
+    string mDefaultStateName;
     public BaseState CurrState
     {
         get { return mCurrState; }
@@ -13,6 +14,7 @@ class StateManager: BaseObject
     }
     protected override void Start()
     {
+        addState(new DelayState());
     }
 
     public void addState(BaseState state)
@@ -33,7 +35,13 @@ class StateManager: BaseObject
     public void setDefaultState(string defaultState)
     {
         checkStateName(defaultState);
-        switchState(defaultState);
+        mDefaultStateName = defaultState;
+        switchToDefaultState();
+    }
+
+    public void switchToDefaultState()
+    {
+        switchState(mDefaultStateName);
     }
 
     void checkStateName(string stateName, bool checkNotExist = true)

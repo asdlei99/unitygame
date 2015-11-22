@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 class HeroIdleState : HeroState
 {
-
     public override void onEnter()
     {
         AnimCtl.startIdle();
