@@ -19,6 +19,8 @@ public class HeroBaseModel: BaseModel
     {
         initConfig();
         mChangedDatas = new Dictionary<string, float>();
+        mChangedDatas[Constants.HERO_ATTR_HEALTH] = get(Constants.HERO_ATTR_HEALTH_MAX);
+        mChangedDatas[Constants.HERO_ATTR_MAGIC] = get(Constants.HERO_ATTR_MAGIC_MAX);
     }
 
     public int AttackDistance

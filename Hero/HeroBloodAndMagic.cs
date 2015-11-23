@@ -18,11 +18,7 @@ class HeroBloodAndMagic: BaseObject
     float mAdjustHeight;
     float mFactor;
     float mTotalScale = 1;
-
-    public float Percent
-    {
-        set { mPercent = value; }
-    }
+    HeroBaseModel mModel;
 
     public float Scale
     {
@@ -50,6 +46,22 @@ class HeroBloodAndMagic: BaseObject
         mBgHeight = mBloodHeight + 2 * mOffY;
 
         mAdjustHeight = 50;
+
+        mModel = HeroModelFactory.getHeroModel(gameObject.name);
+        if (mModel != null)
+        {
+            float allBlood = mModel.get(Constants.HERO_ATTR_HEALTH_MAX);
+            mPercent = mModel.get(Constants.HERO_ATTR_HEALTH) / allBlood;
+            mapEvent(Events.EVT_HERO_ATTR_CHANGED, delegate (string __, object data)
+            {
+                string type = (string)data;
+                if (type.Equals(Constants.HERO_ATTR_HEALTH))
+                {
+                    float currBlood = mModel.get(Constants.HERO_ATTR_HEALTH);
+                    mPercent = currBlood / allBlood;
+                }
+            });
+        }
     }
 
     protected override void OnGUI()
@@ -58,7 +70,12 @@ class HeroBloodAndMagic: BaseObject
         Vector3 screenPos = Camera.main.WorldToScreenPoint(pos);
         mRectBlood = new Rect(new Vector2(screenPos.x - mBloodWidth / 2, Screen.height - screenPos.y + mOffY - mAdjustHeight), new Vector2(mBloodWidth, mBloodHeight));
         mRectBg = new Rect(new Vector2(screenPos.x - mBgWidth/ 2, Screen.height - screenPos.y - mAdjustHeight), new Vector2(mBgWidth, mBgHeight));
+
         GUI.DrawTexture(mRectBg, mTexBg, ScaleMode.ScaleAndCrop);
-        GUI.DrawTexture(mRectBlood, mTexBlood, ScaleMode.ScaleAndCrop);
+
+        Rect clipRect = new Rect(new Vector2(mRectBlood.position.x, mRectBlood.position.y), new Vector2(mRectBlood.size.x *mPercent, mRectBlood.size.y));
+        GUI.BeginClip(clipRect);
+        GUI.DrawTexture(new Rect(Vector2.zero, mRectBlood.size), mTexBlood, ScaleMode.ScaleAndCrop);
+        GUI.EndClip();
     }
 }

@@ -39,10 +39,18 @@ public class HeroAttrConfig
 
     public float get(int level, string attrname)
     {
-        return get(level)[attrname];
+        var levelDict = get(level);
+        if (levelDict.ContainsKey(attrname))
+        {
+            return levelDict[attrname];
+        }
+        else
+        {
+            return 0;
+        }
     }
 
-    public Dictionary<string, float> get(int level)
+    Dictionary<string, float> get(int level)
     {
         return mConfig[level];
     }
