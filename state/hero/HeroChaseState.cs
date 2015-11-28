@@ -5,6 +5,7 @@ class HeroChaseState : HeroState
 {
     public override void onEnter()
     {
+        base.onEnter();
     }
 
     public override void onUpdate()
@@ -16,7 +17,7 @@ class HeroChaseState : HeroState
     {
         if (AnimCtl.isArrivedTargetForChase())//追上了，转攻击
         {
-            return "HeroIdleState";
+            return "HeroAttackState";
         }
         else if (AnimCtl.isOutofRangeForChase())//超范围，停止追逐，返回原地
         {
@@ -30,11 +31,12 @@ class HeroChaseState : HeroState
         {
             return "HeroJumpState";
         }
-        return null;
+        return base.switchToNextState();
     }
 
     public override void onExit()
     {
+        base.onExit();
         AnimCtl.stopChase();
     }
 }

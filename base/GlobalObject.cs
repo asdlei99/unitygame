@@ -37,23 +37,37 @@ class GlobalObject: BaseObject
                 InputManager = GlobalComponentsParent.AddComponent<InputManager>();
                 //Util
                 Util = GlobalComponentsParent.AddComponent<Util>();
+
+                //sound
+                SoundManager.getInstance().playBackground();
             }
         }
         return GlobalComponentsParent;
     }
 
-    public static T getComponent<T>() where T : MonoBehaviour
+    public static T getComponent<T>() where T : Component
     {
         initGlobalObject();
         return GlobalComponentsParent.GetComponent<T>();
     }
 
-    public static void addNewGlobalComponent<T>() where T : MonoBehaviour
+    public static T addNewGlobalComponent<T>() where T : Component
     {
         initGlobalObject();
-        if (null == GlobalComponentsParent.GetComponent<T>())
+        T t = GlobalComponentsParent.GetComponent<T>();
+        if (null == t)
         {
-            GlobalComponentsParent.AddComponent<T>();
+           return GlobalComponentsParent.AddComponent<T>();
+        }
+        return t;
+    }
+
+    public static void removeGlobalComponent<T>() where T : Component
+    {
+        Component c = GlobalComponentsParent.GetComponent<T>();
+        if (c != null)
+        {
+            GameObject.Destroy(c);
         }
     }
 }

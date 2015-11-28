@@ -75,6 +75,7 @@ public class HeroAnimController : BaseObject {
         mStateManager.addState(new HeroChaseState());
         mStateManager.addState(new HeroIdleState());
         mStateManager.addState(new HeroJumpState());
+        mStateManager.addState(new HeroAttackState());
         mStateManager.setDefaultState("HeroIdleState");
 
         mBloodBar = gameObject.AddComponent<HeroBloodAndMagic>();
@@ -251,8 +252,9 @@ public class HeroAnimController : BaseObject {
         mAnim.SetFloat(name, value);
     }
 
-    public float getAnimValue(string name)
+    //下面的函数设置动画状态机的参数，来控制动画转换。
+    public void setAnimValue(string name, bool value)
     {
-        return mAnim.GetFloat(name);
+        mAnim.SetBool(name, value);
     }
 }

@@ -7,9 +7,9 @@ public delegate void EventCallback(string evt, System.Object data);
 public struct DispatchEvent
 {
     public string evt;
-    public BaseObject target;
+    public object target;
     public EventCallback callback;
-    public DispatchEvent(string e, BaseObject t, EventCallback c)
+    public DispatchEvent(string e, object t, EventCallback c)
     {
         evt = e;
         target = t;
@@ -23,11 +23,11 @@ public struct DispatchEvent
 
 public class EventDispatcher : BaseObject
 {
-    Dictionary<string, Dictionary<Object, DispatchEvent>> mStringEventMap;
+    Dictionary<string, Dictionary<object, DispatchEvent>> mStringEventMap;
     protected override void OnEnable()
     {
         base.OnEnable();
-        mStringEventMap = new Dictionary<string, Dictionary<Object, DispatchEvent>>();
+        mStringEventMap = new Dictionary<string, Dictionary<object, DispatchEvent>>();
     }
     protected override void OnDisable()
     {
@@ -40,12 +40,12 @@ public class EventDispatcher : BaseObject
         dispatch(evt, null);
     }
 
-    public void dispatchEvent(string evt, System.Object data)
+    public void dispatchEvent(string evt, object data)
     {
         if (mStringEventMap.ContainsKey(evt))
         {
-            Dictionary<Object, DispatchEvent> target2Event = mStringEventMap[evt];
-            foreach(Object key in target2Event.Keys)
+            Dictionary<object, DispatchEvent> target2Event = mStringEventMap[evt];
+            foreach(object key in target2Event.Keys)
             {
                 DispatchEvent devt = target2Event[key];
                 devt.callback(evt, data);
@@ -53,27 +53,27 @@ public class EventDispatcher : BaseObject
         }
     }
 
-    public void mapEvent(string evt, BaseObject target, EventCallback callback)
+    public void mapEvent(string evt, object target, EventCallback callback)
     {
         mapEvent(new DispatchEvent(evt, target, callback));
     }
 
     public void mapEvent(DispatchEvent devt)
     {
-        Dictionary<Object, DispatchEvent> target2Event = null;
+        Dictionary<object, DispatchEvent> target2Event = null;
         if (!mStringEventMap.ContainsKey(devt.evt))
         {
-            mStringEventMap[devt.evt] = new Dictionary<Object, DispatchEvent>();
+            mStringEventMap[devt.evt] = new Dictionary<object, DispatchEvent>();
         }
         target2Event = mStringEventMap[devt.evt];
         target2Event[devt.target] = devt;
     }
 
-    public void unmapEvent(string evt, BaseObject target, EventCallback callback)
+    public void unmapEvent(string evt, object target, EventCallback callback)
     {
         if (mStringEventMap.ContainsKey(evt))
         {
-            Dictionary<Object, DispatchEvent> target2Event = mStringEventMap[evt];
+            Dictionary<object, DispatchEvent> target2Event = mStringEventMap[evt];
             if (target2Event.ContainsKey(target))
             {
                 target2Event.Remove(target);
@@ -90,13 +90,13 @@ public class EventDispatcher : BaseObject
         unmapEvent(devt.evt, devt.target, devt.callback);
     }
 
-    public void unmapAllEvents(Object target)
+    public void unmapAllEvents(object target)
     {
         if(mStringEventMap != null) {
             ArrayList needRemoveEvt = new ArrayList();
             foreach(string evt in mStringEventMap.Keys)
             {
-                Dictionary<Object, DispatchEvent> dict = mStringEventMap[evt];
+                Dictionary<object, DispatchEvent> dict = mStringEventMap[evt];
                 if (dict.ContainsKey(target))
                 {
                     dict.Remove(target);

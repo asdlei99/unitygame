@@ -31,6 +31,28 @@ public class InputManager : BaseObject {
         {
             dispatch(Events.EVENT_INPUT_JUMP);
         }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            dispatch(Events.EVENT_SKILL0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            dispatch(Events.EVENT_SKILL1);
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            dispatch(Events.EVENT_SKILL2);
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            dispatch(Events.EVENT_SKILL3);
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            dispatch(Events.EVENT_SKILL4);
+        }
+
 #elif UNITY_IPHONE || UNITY_ANDROID
         if (Input.touchCount == 1)
         {

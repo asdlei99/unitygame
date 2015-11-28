@@ -7,6 +7,7 @@ class HeroJumpState : HeroState
     bool needSwitchAnim = false;
     public override void onEnter()
     {
+        base.onEnter();
         AnimCtl.StartCoroutine(updateJumpAnim());
     }
     public override void onUpdate()
@@ -65,6 +66,7 @@ class HeroJumpState : HeroState
 
     public override void onExit()
     {
+        base.onExit();
         needSwitchAnim = false;
         AnimCtl.stopJump();
     }

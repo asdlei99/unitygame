@@ -21,22 +21,20 @@ class BaseState
 
     public virtual void onEnter()
     {
-        throw new NotImplementedException("BaseState.onEnter()");
     }
 
     public virtual void onUpdate()
     {
-        throw new NotImplementedException("BaseState.onUpdate()");
     }
 
     public virtual string switchToNextState()
     {
-        throw new NotImplementedException("BaseState.switchToNextState()");
+        return null;
     }
 
     public virtual void onExit()
     {
-        throw new NotImplementedException("BaseState.onExit()");
+        this.unmapAllEvents();
     }
 
     protected void setExtraData(string name, object obj)
@@ -57,5 +55,21 @@ class BaseState
     protected void cleanExtraData()
     {
         mStateManager.cleanExtraData();
+    }
+
+    //utils
+    protected void mapEvent(string evt, EventCallback callback)
+    {
+        GlobalObject.EventDispatcher.mapEvent(evt, this, callback);
+    }
+
+    protected void unmapAllEvents()
+    {
+        GlobalObject.EventDispatcher.unmapAllEvents(this);
+    }
+
+    protected void dispatch(string evt, object data)
+    {
+        GlobalObject.EventDispatcher.dispatchEvent(evt, data);
     }
 }

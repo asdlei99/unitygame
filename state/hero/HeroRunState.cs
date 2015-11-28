@@ -6,6 +6,7 @@ class HeroRunState : HeroState
     Vector3 mTarget = Vector3.zero;
     public override void onEnter()
     {
+        base.onEnter();
         resetTarget();
     }
 
@@ -44,11 +45,12 @@ class HeroRunState : HeroState
                 return "HeroIdleState";
             }
         }
-        return null;
+        return base.switchToNextState();
     }
 
     public override void onExit()
     {
+        base.onExit();
         AnimCtl.stopRun();
     }
 }

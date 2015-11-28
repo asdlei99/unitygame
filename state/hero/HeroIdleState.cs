@@ -5,6 +5,7 @@ class HeroIdleState : HeroState
 {
     public override void onEnter()
     {
+        base.onEnter();
         AnimCtl.startIdle();
     }
 
@@ -27,11 +28,12 @@ class HeroIdleState : HeroState
         {
             return "HeroChaseState";//转到 chase 状态
         }
-        return null;
+        return base.switchToNextState();
     }
 
     public override void onExit()
     {
+        base.onExit();
         AnimCtl.stopIdle();
     }
 }
