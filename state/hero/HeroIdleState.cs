@@ -5,7 +5,6 @@ class HeroIdleState : HeroState
 {
     public override void onEnter()
     {
-        base.onEnter();
         AnimCtl.startIdle();
     }
 
@@ -33,7 +32,6 @@ class HeroIdleState : HeroState
 
     public override void onExit()
     {
-        base.onExit();
         AnimCtl.stopIdle();
     }
 }

@@ -34,6 +34,10 @@ class BaseState
 
     public virtual void onExit()
     {
+    }
+
+    public virtual void afterExit()
+    {
         this.unmapAllEvents();
     }
 

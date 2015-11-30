@@ -5,7 +5,6 @@ class HeroAttackState : HeroState
 {
     public override void onEnter()
     {
-        base.onEnter();
         AnimCtl.setAnimValue("attackState", true);
         mapEvent(Events.EVENT_SKILL0, onEvent);
         mapEvent(Events.EVENT_SKILL1, onEvent);
@@ -40,6 +39,12 @@ class HeroAttackState : HeroState
 
     public override void onUpdate()
     {
+        if (AnimCtl.ChaseObject != null)
+        {
+            //看着敌人
+            GameObject.transform.LookAt(AnimCtl.ChaseObject.transform);
+        }
+        AnimCtl.checkEnemy();
     }
 
     public override string switchToNextState()
@@ -70,7 +75,6 @@ class HeroAttackState : HeroState
 
     public override void onExit()
     {
-        base.onExit();
         AnimCtl.setAnimValue("attackState", false);
         resetAnimValue();
     }

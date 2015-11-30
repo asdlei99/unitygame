@@ -6,7 +6,7 @@ class HeroChangbiziModel:HeroBaseModel
     protected override void initConfig()
     {
         mConfig = new HeroChangbiziConfig();
-        mCamp = "Changbizi";
+        mCamp = "Enemy";
     }
 
     protected override HeroBaseModel newInstance()

@@ -6,7 +6,7 @@ class HeroJingchaModel:HeroBaseModel
     protected override void initConfig()
     {
         mConfig = new HeroJingchaConfig();
-        mCamp = "Jingcha";
+        mCamp = "Hero";
     }
 
     protected override HeroBaseModel newInstance()

@@ -10,6 +10,7 @@ public class Constants
     public const string HERO_NAME_BOSS = "Boss";
     public const string HERO_NAME_JINGCHA = "Jingcha";
     public const string HERO_NAME_CHANGBIZI = "Changbizi";
+    public const string HERO_NAME_HOME = "Home";
 
     //个人属性
     //下面的属性是个人属性，装备也可以带

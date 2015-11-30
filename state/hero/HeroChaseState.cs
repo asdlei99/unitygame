@@ -5,7 +5,6 @@ class HeroChaseState : HeroState
 {
     public override void onEnter()
     {
-        base.onEnter();
     }
 
     public override void onUpdate()
@@ -36,7 +35,6 @@ class HeroChaseState : HeroState
 
     public override void onExit()
     {
-        base.onExit();
         AnimCtl.stopChase();
     }
 }

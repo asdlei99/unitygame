@@ -98,6 +98,7 @@ public class HeroAnimController : BaseObject {
     public void stopChase()
     {
         isChasing = false;
+        mAnim.speed = mAnimInitSpeed;
         if (mNavAgent.isActiveAndEnabled)
         {
             mNavAgent.ResetPath();
@@ -212,12 +213,17 @@ public class HeroAnimController : BaseObject {
         {
             return;
         }
+
         //10m内是否有敌人
         Collider[] colliders = Physics.OverlapSphere(transform.position, mModel.AlertDistance);
         foreach (var c in colliders)
         {
+            if (c.gameObject.Equals(gameObject))
+            {
+                continue;
+            }
             var cGameObj = c.gameObject;
-            var triggerObj = cGameObj.GetComponent<HeroAnimController>();
+            var triggerObj = cGameObj.GetComponent<HeroBloodAndMagic>();//有血有肉的人就可以被攻击
             if (triggerObj != null)
             {
                 HeroBaseModel cmodel = HeroModelFactory.getHeroModel(cGameObj.name);

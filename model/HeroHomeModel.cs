@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-class HeroBossModel: HeroBaseModel
+class HeroHomeModel: HeroBaseModel
 {
     protected override void initConfig()
     {
-        mConfig = new HeroBossConfig();
-        mCamp = "Enemy";
+        mConfig = new HeroHomeConfig();
+        mCamp = "Hero";
     }
 
     protected override HeroBaseModel newInstance()
     {
-        return new HeroBossModel();
+        return new HeroHomeModel();
     }
 }

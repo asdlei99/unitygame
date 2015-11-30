@@ -59,6 +59,7 @@ class StateManager: BaseObject
         if (mCurrState != null)
         {
             mCurrState.onExit();
+            mCurrState.afterExit();
         }
         mCurrState = mStatesDict[newStateName];
         mCurrState.onEnter();

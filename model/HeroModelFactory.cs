@@ -15,7 +15,10 @@ class HeroModelFactory
                 model = Singleton<HeroChangbiziModel>.getInstance();
                 break;
             case Constants.HERO_NAME_JINGCHA:
-                model = Singleton<HeroChangbiziModel>.getInstance();
+                model = Singleton<HeroJingchaModel>.getInstance();
+                break;
+            case Constants.HERO_NAME_HOME:
+                model = Singleton<HeroHomeModel>.getInstance();
                 break;
             default:
                 break;
