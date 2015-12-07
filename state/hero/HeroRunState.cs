@@ -39,6 +39,10 @@ class HeroRunState : HeroState
             {
                 return "HeroChaseState";
             }
+            else if (AnimCtl.isArrivedTargetForChase())
+            {
+                return "HeroAttackState";
+            }
             else
             {
                 return "HeroIdleState";

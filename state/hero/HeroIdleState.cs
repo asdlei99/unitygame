@@ -27,6 +27,10 @@ class HeroIdleState : HeroState
         {
             return "HeroChaseState";//转到 chase 状态
         }
+        else if (AnimCtl.isArrivedTargetForChase())//如果在攻击范围内
+        {
+            return "HeroAttackState";
+        }
         return base.switchToNextState();
     }
 

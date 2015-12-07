@@ -19,7 +19,7 @@ public class HeroBaseModel: BaseModel
     {
         initConfig();
         mChangedDatas = new Dictionary<string, float>();
-        mChangedDatas[Constants.HERO_ATTR_HEALTH] = get(Constants.HERO_ATTR_HEALTH_MAX);
+        mChangedDatas[Constants.HERO_ATTR_HEALTH] = get(Constants.HERO_ATTR_HEALTH_MAX);//初始化血和蓝
         mChangedDatas[Constants.HERO_ATTR_MAGIC] = get(Constants.HERO_ATTR_MAGIC_MAX);
     }
 
@@ -137,6 +137,11 @@ public class HeroBaseModel: BaseModel
         }
         mChangedDatas[type] += value;
         GlobalObject.EventDispatcher.dispatchEvent(Events.EVT_HERO_ATTR_CHANGED, mType);
+    }
+
+    public bool isDead()
+    {
+        return get(Constants.HERO_ATTR_HEALTH) <= 0;
     }
 
     protected virtual void initConfig()

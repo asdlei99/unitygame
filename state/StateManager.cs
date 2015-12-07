@@ -1,10 +1,23 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+delegate bool delegateCond();
+class StateCondition
+{
+    public string key;
+    public string state;
+    public int priority;
+    public delegateCond cond;
+};
+
 class StateManager: BaseObject
 {
     Dictionary<string, BaseState> mStatesDict = new Dictionary<string, BaseState>();
     Dictionary<string, object> mExtraData = new Dictionary<string, object>();//用于不同状态之间传递数据
+    ArrayList mCondArr = new ArrayList();
+
     BaseState mCurrState;
     string mDefaultStateName;
     public BaseState CurrState
@@ -15,6 +28,33 @@ class StateManager: BaseObject
     protected override void Start()
     {
         addState(new DelayState());
+    }
+
+    //为某些状态设置条件，如果条件达到必定跳入
+    public void setCondForState(string state, int priority, delegateCond cond)
+    {
+        checkStateName(state);
+        mCondArr.Add(new StateCondition() { state = state, priority = priority, cond = cond });
+    }
+
+    bool findAndExecuteCondState()
+    {
+        StateCondition maxPriorityCond = null;
+        int currPriority = -1;
+        foreach(StateCondition cond in mCondArr)
+        {
+            if(cond.cond() && cond.priority > currPriority && !mCurrState.GetType().Name.Equals(cond.state))
+            {
+                currPriority = cond.priority;
+                maxPriorityCond = cond;
+            }
+        }
+        if(maxPriorityCond != null)
+        {
+            switchState(maxPriorityCond.state);
+            return true;
+        }
+        return false;
     }
 
     public void addState(BaseState state)
@@ -68,10 +108,13 @@ class StateManager: BaseObject
 
     void trySwitchState()
     {
-        string nextStateName = mCurrState.switchToNextState();
-        if (nextStateName != null)
+        if (!findAndExecuteCondState())
         {
-            switchState(nextStateName);
+            string nextStateName = mCurrState.switchToNextState();
+            if (nextStateName != null)
+            {
+                switchState(nextStateName);
+            }
         }
     }
 

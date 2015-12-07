@@ -50,6 +50,11 @@ public class HeroAnimController : BaseObject {
         get { return mNavAgent; }
     }
 
+    public Animator Anim
+    {
+        get { return mAnim; }
+    }
+
     protected override void Start() {
         mAnim = GetComponent<Animator>();
         mNavAgent = GetComponent<NavMeshAgent>();
@@ -76,7 +81,11 @@ public class HeroAnimController : BaseObject {
         mStateManager.addState(new HeroIdleState());
         mStateManager.addState(new HeroJumpState());
         mStateManager.addState(new HeroAttackState());
+        mStateManager.addState(new HeroDeathState());
         mStateManager.setDefaultState("HeroIdleState");
+
+        //如果死亡，不管在什么状态下都跳转到死亡状态。
+        mStateManager.setCondForState("HeroDeathState", 1, () => { return mModel.isDead(); });
 
         mBloodBar = gameObject.AddComponent<HeroBloodAndMagic>();
     }
@@ -198,7 +207,7 @@ public class HeroAnimController : BaseObject {
 
     public bool isArrivedTargetForChase()
     {
-        return getChaseDistance() <= mModel.AttackDistance;
+        return mChaseObj != null && getChaseDistance() <= mModel.AttackDistance;
     }
 
     float getChaseDistance()
