@@ -45,6 +45,33 @@ class HeroAttackState : HeroState
             GameObject.transform.LookAt(AnimCtl.ChaseObject.transform);
         }
         AnimCtl.checkEnemy();
+
+        checkHit();
+    }
+
+    void doAttack()
+    {
+        GameObject enemy = AnimCtl.ChaseObject;
+        if (enemy != null)
+        {
+            HeroController enemyCtl = enemy.GetComponent<HeroController>();
+            HeroBaseModel enemyModel = enemyCtl.Model;
+            //攻击敌人
+            AnimCtl.Model.attack(enemyModel);
+        }
+    }
+
+    bool isAttacked = false;
+    void checkHit()
+    {
+        AnimatorStateInfo info = AnimCtl.Anim.GetCurrentAnimatorStateInfo(0);
+        if(info.normalizedTime < 0.5f && isAttacked) {
+            isAttacked = false;
+        } else if (info.normalizedTime / info.length >= 0.5f && !isAttacked)
+        {
+            doAttack();
+            isAttacked = true;
+        }
     }
 
     public override string switchToNextState()

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 class HeroInit: BaseObject
 {
-    HeroAnimController mAnimCtl;
+    HeroController mAnimCtl;
     HeroCamera mCamera;
     protected override void Start()
     {
-        mAnimCtl = this.gameObject.AddComponent<HeroAnimController>();
+        mAnimCtl = this.gameObject.AddComponent<HeroController>();
         bindModel();
         mapEvents();
 

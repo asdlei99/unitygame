@@ -46,4 +46,9 @@ public class Constants
 
     //人物移动正常速度
     public const float HERO_RUN_NORMAL_SPEED = 5;
+
+    //英雄的状态
+    public const string HERO_STATUS_POISION = "poision";//中毒
+    public const string HERO_STATUS_FREEZE = "freeze";//冰冻
+    public const string HERO_STATUS_VERTIGO = "vertigo";//眩晕
 }

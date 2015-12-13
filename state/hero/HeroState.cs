@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 class HeroState : BaseState
 {
-    HeroAnimController mAnimCtl;
+    HeroController mAnimCtl;
     public override StateManager StateManager
     {
         get { return base.StateManager; }
         set
         {
             base.StateManager = value;
-            mAnimCtl = GameObject.GetComponent<HeroAnimController>();
+            mAnimCtl = GameObject.GetComponent<HeroController>();
         }
     }
 
-    protected HeroAnimController AnimCtl
+    protected HeroController AnimCtl
     {
         get { return mAnimCtl; }
     }

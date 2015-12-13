@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 //控制英雄的动画，移动，还有刚体设置
-public class HeroAnimController : BaseObject {
+public class HeroController : BaseObject {
     private Animator mAnim;
     private NavMeshAgent mNavAgent;
     private Rigidbody mRigidBody;
@@ -14,7 +14,7 @@ public class HeroAnimController : BaseObject {
     private string mCurrRunningAnim;
     private HeroBaseModel mModel;
     private StateManager mStateManager;
-    private HeroBloodAndMagic mBloodBar;
+    private HeroUI mBloodBar;
 
     private bool isAttacking;
 
@@ -87,7 +87,7 @@ public class HeroAnimController : BaseObject {
         //如果死亡，不管在什么状态下都跳转到死亡状态。
         mStateManager.setCondForState("HeroDeathState", 1, () => { return mModel.isDead(); });
 
-        mBloodBar = gameObject.AddComponent<HeroBloodAndMagic>();
+        mBloodBar = gameObject.AddComponent<HeroUI>();
     }
 
     public void startChase(GameObject chaseObj)
@@ -232,7 +232,7 @@ public class HeroAnimController : BaseObject {
                 continue;
             }
             var cGameObj = c.gameObject;
-            var triggerObj = cGameObj.GetComponent<HeroBloodAndMagic>();//有血有肉的人就可以被攻击
+            var triggerObj = cGameObj.GetComponent<HeroUI>();//有血有肉的人就可以被攻击
             if (triggerObj != null)
             {
                 HeroBaseModel cmodel = HeroModelFactory.getHeroModel(cGameObj.name);
@@ -243,6 +243,16 @@ public class HeroAnimController : BaseObject {
                 }
             }
         }
+    }
+
+    void moveToPosition(Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
+    public void moveToInitPos()
+    {
+        moveToPosition(mModel.InitPosition);
     }
 
     //下面3个函数，防止人物相撞后滑动。
@@ -272,4 +282,6 @@ public class HeroAnimController : BaseObject {
     {
         mAnim.SetBool(name, value);
     }
+
+    //属性的持续变化。
 }

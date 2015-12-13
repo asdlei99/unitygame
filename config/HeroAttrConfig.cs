@@ -86,6 +86,7 @@ public class HeroAttrConfig
             levelDict[Constants.HERO_ATTR_NEED_EXP] = needexpStart + calcValueGrowInt(level, needexpOff, attrValueFactor);
             levelDict[Constants.HERO_ATTR_ATTACKSPEED] = attackspeedStart + calcValueGrowFloat(level, attackspeedOff, attrValueFactor) / 1000;
             levelDict[Constants.HERO_ATTR_RUNSPEED] = runspeedStart + calcValueGrowFloat(level, runspeedOff, attrValueFactor) / 1000;
+            levelDict[Constants.HERO_ATTR_HIT] = 100;
             mConfig[level] = levelDict;
         }
     }
@@ -134,66 +135,6 @@ public class HeroAttrConfig
             s = s + "\t" + level + "\t" + Constants.HERO_ATTR_NEED_EXP + "\t" + levelDict[Constants.HERO_ATTR_NEED_EXP] + "\n";
         }
         return s;
-    }
-
-    //物理伤害公式 减法
-    public int damage(int attack, int mattack, int defense, int mdefense)
-    {
-        return (int)((attack * 1.5 + mattack * 0.5) - (defense * 1.5 + mdefense * 0.5));
-    }
-
-    //魔法伤害公式 减法
-    public int mdamage(int attack, int mattack, int defense, int mdefense)
-    {
-        return (int)((mattack * 1.5 + attack * 0.5) - (mdefense * 1.5 + defense * 0.5));
-    }
-
-    //物理群攻：假设群攻一般会同时攻击到5个人。那么每个人承受的攻击为普通攻击的0.2倍
-    public int damageGroups(int attack, int mattack, int defense, int mdefense, int distance, int maxDistance)
-    {
-        return damage(attack, mattack, defense, mdefense) / 5 * (int)(1.0 * distance / maxDistance);
-    }
-
-    //魔法群攻
-    public int mdamageGroups(int attack, int mattack, int defense, int mdefense, int distance, int maxDistance)
-    {
-        return mdamage(attack, mattack, defense, mdefense) / 5 * (int)(1.0 * distance / maxDistance);
-    }
-
-    //是否命中
-    public bool isHit(int hit, int dodage)
-    {
-        return isTrigger(hit, dodage);
-    }
-
-    //是否暴击
-    public bool isCrit(int crit, int decrit)
-    {
-        return isTrigger(crit, decrit);
-    }
-
-    //是否眩晕
-    public bool isVertigo(int vertigo, int immunity)
-    {
-        return isTrigger(vertigo, immunity);
-    }
-
-    //是否冰冻
-    public bool isFreeze(int freeze, int immunity)
-    {
-        return isTrigger(freeze, immunity);
-    }
-
-    //是否中毒
-    public bool isPoison(int poison, int immunity)
-    {
-        return isTrigger(poison, immunity);
-    }
-
-    //正反两方触发事件的概率，均为0-100的值
-    public bool isTrigger(int value, int devalue)
-    {
-        return new System.Random((int)Time.time).Next() < value * (100 - devalue);
     }
     
     public float getDropExp(int level)

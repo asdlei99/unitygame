@@ -1,15 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+public class HeroAttrChange
+{
+    public string which;
+    public string what;
+    public float from;
+    public float to;
+}
+
+public class HeroStatus
+{
+    public bool isActive;
+    public float time;
+    public float startTime;
+    public object value;
+}
+
 public class HeroBaseModel: BaseModel
 {
     protected float mAttackDistance = 4f;//攻击距离
     protected float mAlertDistance = 10;//可发现敌人距离
     protected string mCamp = "";//阵营，属于魏蜀吴哪一国家
     protected GameObject mGameObject = null;
-    protected string mType = "";//类型
+    protected string mType = "";//英雄的名字作为此model唯一标记
     protected int mLevel = 1;//英雄等级
     protected int mCurrExp = 0;//英雄当前经验
+
+    protected Dictionary<string, HeroStatus> mStatus;//英雄当前的状态，中毒，冰冻
+
+    //位置
+    protected Vector3 mHeroInitPosition = new Vector3(82.4f, 20.00751f, 97.5f);
+
     //技能
     //装备
     protected HeroAttrConfig mConfig = null;//配置文件
@@ -100,6 +123,16 @@ public class HeroBaseModel: BaseModel
         set { mCamp = value; }
     }
 
+    public Vector3 InitPosition
+    {
+        get {
+            return mHeroInitPosition;
+        }
+        set {
+            mHeroInitPosition = value;
+        }
+    }
+
     public void growExp(int exp)
     {
         this.mCurrExp += exp;
@@ -109,8 +142,32 @@ public class HeroBaseModel: BaseModel
             this.mCurrExp -= needExp;
             mLevel++;
             GlobalObject.EventDispatcher.dispatchEvent(Events.EVT_HERO_UPGRADE_LEVEL, mType);
-            GlobalObject.EventDispatcher.dispatchEvent(Events.EVT_HERO_ATTR_CHANGED, mType);
         }
+    }
+
+    public void enableStatus(string key, HeroStatus status)
+    {
+        if (!mStatus.ContainsKey(key))
+        {
+            mStatus[key] = status;
+        }
+        else
+        {
+            mStatus[key].time += status.time;
+        }
+    }
+
+    public void closeStatus(string key)
+    {
+        mStatus.Remove(key);
+    }
+    public HeroStatus getStatus(string key)
+    {
+        if (mStatus.ContainsKey(key))
+        {
+            return mStatus[key];
+        }
+        return null;
     }
 
     public bool isInSameCamp(HeroBaseModel model)
@@ -129,14 +186,79 @@ public class HeroBaseModel: BaseModel
     }
 
     //增加/减少数值
-    public void add(string type, float value)
+    public virtual void add(string type, float value)
     {
         if (!mChangedDatas.ContainsKey(type))
         {
             mChangedDatas[type] = 0;
         }
         mChangedDatas[type] += value;
-        GlobalObject.EventDispatcher.dispatchEvent(Events.EVT_HERO_ATTR_CHANGED, mType);
+        if (value != 0)
+        {
+            GlobalObject.EventDispatcher.dispatchEvent(Events.EVT_HERO_ATTR_CHANGED, new HeroAttrChange() {which = mType, what = type, from = value, to = get(type) });
+        }
+    }
+
+    //普通攻击
+    public void attack(HeroBaseModel model)
+    {
+        bool isCrit = false;
+        if(!BaseConfig.isHit(get(Constants.HERO_ATTR_HIT), get(Constants.HERO_ATTR_DODGE)))
+        {
+            Debug.Log("attack error! is not hit!!");
+            return;
+        }
+        else
+        {
+            if(BaseConfig.isCrit(get(Constants.HERO_ATTR_CRIT), get(Constants.HERO_ATTR_DECRIT)))//暴击
+            {
+                Debug.Log("attack status is crit!!");
+                GlobalObject.EventDispatcher.dispatchEvent(Events.EVT_HERO_CRIT);
+                isCrit = true;
+            }
+            else if (BaseConfig.isFreeze(get(Constants.HERO_ATTR_FREEZE), get(Constants.HERO_ATTR_IMMUNITY)))//冰冻
+            {
+                Debug.Log("attack status is freeze!!");
+                model.enableStatus(Constants.HERO_STATUS_FREEZE, new HeroStatus() {startTime=Time.time, isActive=true, time = 3 });
+            }
+            else if(BaseConfig.isVertigo(get(Constants.HERO_ATTR_VERTIGO), get(Constants.HERO_ATTR_IMMUNITY)))//眩晕
+            {
+                Debug.Log("attack status is vertigo!!");
+                model.enableStatus(Constants.HERO_STATUS_FREEZE, new HeroStatus() { startTime = Time.time, isActive = true, time = 3 });
+            }
+            else if (BaseConfig.isPoison(get(Constants.HERO_ATTR_POISON), get(Constants.HERO_ATTR_IMMUNITY)))//中毒
+            {
+                Debug.Log("attack status is poison!!");
+                model.enableStatus(Constants.HERO_STATUS_FREEZE, new HeroStatus() { startTime = Time.time, isActive = true, time = 3, value=300 });
+            }
+        }
+
+        float attackValue = get(Constants.HERO_ATTR_ATTACK);
+        float mattackValue = get(Constants.HERO_ATTR_MATTACK);
+        float defenseValue = model.get(Constants.HERO_ATTR_DEFENSE);
+        float mdefenseValue = model.get(Constants.HERO_ATTR_MDEFENSE);
+        float damage = 0;
+        if (attackValue < mattackValue)
+        {
+            damage = BaseConfig.damage(attackValue, mattackValue, defenseValue, mdefenseValue);
+        }
+        else
+        {
+            damage = BaseConfig.mdamage(attackValue, mattackValue, defenseValue, mdefenseValue);
+        }
+
+        if (isCrit)
+        {
+            damage *= 2;
+        }
+
+        //掉血
+        model.add(Constants.HERO_ATTR_HEALTH, -damage);
+    }
+    //群攻
+    public void attackGroup(HeroBaseModel model)
+    {
+
     }
 
     public bool isDead()

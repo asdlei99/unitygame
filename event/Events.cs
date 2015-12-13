@@ -19,10 +19,16 @@ public class Events {
     public const string EVENT_SELECT_HERO = "event_select_hero";
 
     //升级
-    public const string EVT_HERO_UPGRADE_LEVEL = "HeroUpgradeLevel";
+    public const string EVT_HERO_UPGRADE_LEVEL = "event_hero_upgrade_level";
 
     //属性变化
-    public const string EVT_HERO_ATTR_CHANGED = "HeroAttrChanged";
+    public const string EVT_HERO_ATTR_CHANGED = "event_hero_attr_changed";
+
+    //暴击
+    public const string EVT_HERO_CRIT = "event_hero_crit";
+
+    //游戏结束
+    public const string EVT_GAME_OVER = "evt_game_over";
 
     //需要同步的事件
 }
