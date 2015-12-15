@@ -37,7 +37,7 @@ class HeroRunState : HeroState
             AnimCtl.checkEnemy();
             if (AnimCtl.IsChasing)//TODO: 可能遇到敌人了。
             {
-                return "HeroChaseState";
+                return "HeroIdleState";//避免切换状态太快 动画奇怪
             }
             else if (AnimCtl.isArrivedTargetForChase())
             {

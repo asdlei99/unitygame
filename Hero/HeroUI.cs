@@ -74,7 +74,9 @@ class HeroUI: BaseObject
     {
         if (Time.timeScale == 0)
         {
-            GUI.TextField(new Rect(Screen.width / 2, Screen.height / 2, 300, 50), "游戏结束");
+            GUI.skin.label.fontSize = 30;
+            GUI.skin.label.normal.textColor = Color.red;
+            GUI.Label(new Rect(Screen.width / 2 - 100, Screen.height / 2, 200, 50), "游戏结束");
         }
         else
         {

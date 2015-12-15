@@ -28,7 +28,7 @@ class HeroSync: BaseObject
         }
     }
 
-    //检查我自己的动作
+    //检查我自己的动作 这个是强制同步，还需要另一个单独同步的机制
     void checkSync()
     {
         foreach(var pair in SyncDict)

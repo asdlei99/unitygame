@@ -3,6 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 //控制英雄的动画，移动，还有刚体设置
+/*
+这个文件可以分解为4个文件
+HeroState.cs
+HeroAnim.cs
+HeroChase.cs
+HeroNav.cs
+*/
 public class HeroController : BaseObject {
     private Animator mAnim;
     private NavMeshAgent mNavAgent;
@@ -217,6 +224,14 @@ public class HeroController : BaseObject {
 
     public void checkEnemy()
     {
+        if(mChaseObj != null)
+        {
+            var chaseObjModel = HeroModelFactory.getHeroModel(mChaseObj.name);
+            if (chaseObjModel.isDead())
+            {
+                mChaseObj = null;
+            }
+        }
         //如果不在追逐状态，并且距离目标为可攻击距离，那么就不需要追逐。
         if(!isChasing && mChaseObj != null && isArrivedTargetForChase())
         {
@@ -233,7 +248,8 @@ public class HeroController : BaseObject {
             }
             var cGameObj = c.gameObject;
             var triggerObj = cGameObj.GetComponent<HeroUI>();//有血有肉的人就可以被攻击
-            if (triggerObj != null)
+            var triggerModel = HeroModelFactory.getHeroModel(cGameObj.name);
+            if (triggerObj != null && !triggerModel.isDead())
             {
                 HeroBaseModel cmodel = HeroModelFactory.getHeroModel(cGameObj.name);
                 if (!cmodel.isInSameCamp(mModel))
